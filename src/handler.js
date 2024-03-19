@@ -32,6 +32,15 @@ module.exports.putData = async (event) => {
 module.exports.getData = async (event) => {
 			return {
 					statusCode: 200,
-					body: JSON.stringify({ message: 'VEIO AQQUIIIIIII' })
+					body: JSON.stringify({ message: 'Olá Seja bem Vindo' })
 			};
 };
+
+
+module.exports.updateData = async (event) => {
+	return {
+			statusCode: 200,
+			body: JSON.stringify({ message: 'Alteração feita com Sucesso' })
+	};
+};
+

@@ -24,3 +24,10 @@ functions:
       - http:
           path: data
           method: get
+  updateData:
+    handler: src/handler.updateData
+    timeout: 30 # Defina o timeout conforme necessário
+    events:
+      - http:
+          path: data
+          method: patch
