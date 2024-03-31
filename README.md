@@ -4,6 +4,8 @@ Depois de entrar no projeto, você pode fazer a imagem do docker usando o comand
 
 docker-compose up --build.
 
-Também temos que executar localmente o projeto:
+Também podemos executar localmente o projeto com o comando:
 
-npm run start
+npm run start.
+
+Lembrando que se Executar localmente, lembrar de iniciar o Banco de Dados, no caso MongoDB.
