@@ -19,7 +19,7 @@ functions:
           method: put
   getData:
     handler: src/handler.getData
-    timeout: 30 # Defina o timeout conforme necessário
+    timeout: 90 # Defina o timeout conforme necessário
     events:
       - http:
           path: data
