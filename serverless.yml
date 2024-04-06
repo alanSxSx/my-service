@@ -29,5 +29,5 @@ functions:
     timeout: 30 # Defina o timeout conforme necessário
     events:
       - http:
-          path: data
+          path: data/{id}
           method: patch

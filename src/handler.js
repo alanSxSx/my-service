@@ -32,7 +32,7 @@ module.exports.putData = async (event) => {
 
 module.exports.getData = async (event) => {
 	try {
-    const { MongoClient } = require('mongodb');
+    const { MongoClient, ObjectId } = require('mongodb');
     const client = new MongoClient('mongodb://localhost:27017');
 
     await client.connect();
@@ -65,48 +65,41 @@ module.exports.getData = async (event) => {
 
 module.exports.updateData = async (event) => {
 	try {
-		const client = new MongoClient('mongodb://localhost:27017');
-		await client.connect();
+		const { MongoClient, ObjectId } = require('mongodb');
+			const client = new MongoClient('mongodb://localhost:27017');
+			await client.connect();
 
-		const db = client.db('mydb');
-		const collection = db.collection('mycollection');
+			const db = client.db('mydb');
+			const collection = db.collection('mycollection');
 
-		const dataToUpdate = JSON.parse(event.body);
+			// Extrair o ID do registro a ser atualizado dos parâmetros da URL
+			const { id } = event.pathParameters;
 
-		// Supondo que o ID do documento a ser atualizado seja passado no corpo da requisição
-		const { id } = dataToUpdate;
+			// Extrair os dados do corpo da solicitação PATCH
+			const newData = JSON.parse(event.body);
 
-		// Construir o filtro para encontrar o documento a ser atualizado
-		const filter = { _id: ObjectId(id) };
+			// Realizar a atualização no banco de dados
+			const result = await collection.updateOne({ _id: new ObjectId(id) }, { $set: newData });
 
-		// Remover o id dos dados a serem atualizados
-		delete dataToUpdate.id;
+			await client.close();
 
-		// Construir o objeto de atualização
-		const updateData = { $set: dataToUpdate };
-
-		// Executar a operação de atualização
-		const result = await collection.updateOne(filter, updateData);
-
-		await client.close();
-
-		if (result.modifiedCount === 1) {
-				return {
-						statusCode: 200,
-						body: JSON.stringify({ message: 'Documento atualizado com sucesso' })
-				};
-		} else {
-				return {
-						statusCode: 404,
-						body: JSON.stringify({ message: 'Documento não encontrado' })
-				};
-		}
-} catch (error) {
-		console.error('Error updating data:', error);
-		return {
-				statusCode: 500,
-				body: JSON.stringify({ message: 'Internal server error' })
-		};
-}
+			if (result.modifiedCount === 1) {
+					return {
+							statusCode: 200,
+							body: JSON.stringify({ message: 'Registro atualizado com sucesso' })
+					};
+			} else {
+					return {
+							statusCode: 404,
+							body: JSON.stringify({ message: 'Registro não encontrado' })
+					};
+			}
+	} catch (error) {
+			console.error('Erro ao atualizar o registro:', error);
+			return {
+					statusCode: 500,
+					body: JSON.stringify({ message: 'Erro interno do servidor' })
+			};
+	}
 };
 
